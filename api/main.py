@@ -1,8 +1,6 @@
 from fastapi import FastAPI
+from api.routers import article
 
-app = FastAPI()
 
-
-@app.get("/hello")
-async def hello():
-    return {"message": "hello world!"}
+app = FastAPI() # FastAPIはStarletteを直接継承するクラスです。
+app.include_router(article.router)
