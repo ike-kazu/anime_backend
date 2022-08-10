@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -20,3 +20,6 @@ class ArticleCreateResponse(ArticleCreate):
 
 class Article(ArticleBase):
     pass
+
+class ArticlesCreate(BaseModel):
+    articles: List[ArticleBase]

@@ -20,6 +20,12 @@ async def create_article(
     ):
     return await article_crud.create_article(db, article_body)
 
+@router.post('/articles', response_model=article_schema.ArticlesCreate)
+async def create_articles(
+    articles_body: article_schema.ArticlesCreate, db: AsyncSession = Depends(get_db)
+    ):
+    return await article_crud.create_articles(db, articles_body)
+
 @router.put("/articles/{article_id}", response_model=article_schema.ArticleCreateResponse)
 async def update_article(article_id: int, article_body: article_schema.ArticleCreate):
     return article_schema.ArticleCreateResponse(id=article_id, **article_body.dict())

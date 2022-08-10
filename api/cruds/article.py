@@ -12,3 +12,15 @@ async def create_article(
     await db.commit()
     await db.refresh(article)
     return article
+
+async def create_articles(
+    db: AsyncSession, articles_create: article_schema.ArticlesCreate
+) -> article_model.Article:
+    # debug
+    print(articles_create.articles)
+    for article in articles_create.dict()["articles"]:
+        article = article_model.Article(**article)
+        db.add(article)
+        await db.commit()
+        await db.refresh(article)
+    return articles_create.dict()
