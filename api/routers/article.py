@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.cruds.article as article_crud
+import api.cruds.scraping as article_scraping
 from api.db import get_db
 from typing import List
 
@@ -33,3 +34,8 @@ async def update_article(article_id: int, article_body: article_schema.ArticleCr
 @router.delete("/articles/{article_id}", response_model=None)
 async def delete_article():
     return
+
+@router.post("/scraping", response_model=article_schema.Article)
+async def create_scraping_articles(
+    articles_body: article_schema.ArticlesCreate, db: AsyncSession = Depends(get_db)):
+    return await article_scraping.create_articles(db, articles_body)
