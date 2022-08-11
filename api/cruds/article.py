@@ -1,4 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from sqlalchemy.engine import Result
+from typing import List, Tuple
 
 import api.models.article as article_model
 import api.schemas.article as article_schema
@@ -13,6 +16,7 @@ async def create_article(
     await db.refresh(article)
     return article
 
+
 async def create_articles(
     db: AsyncSession, articles_create: article_schema.ArticlesCreate
 ) -> article_model.Article:
@@ -24,3 +28,16 @@ async def create_articles(
         await db.commit()
         await db.refresh(article)
     return articles_create.dict()
+
+
+async def get_articles(db: AsyncSession) -> List[Tuple[int, str, bool]]:
+    result: Result = await (
+        db.execute(
+            select(
+                article_model.Article.id,
+                article_model.Article.imageURL,
+                article_model.Article.articleURL,
+            )
+        )
+    )
+    return result.all()

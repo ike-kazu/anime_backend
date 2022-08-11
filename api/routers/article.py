@@ -11,11 +11,11 @@ from api.schemas import article as article_schema
 
 router = APIRouter()
 
-@router.get("/articles", response_model=List[article_schema.Article])
-async def list_articles():
-    return [article_schema.Article(id=1, articleURL="https://article", imageURL="https://image")]
+@router.get("/articles", response_model=List[article_schema.ArticleCreateResponse])
+async def list_articles(db: AsyncSession = Depends(get_db)):
+    return await article_crud.get_articles(db)
 
-@router.post('/article', response_model=article_schema.ArticleCreateResponse)
+@router.post('/article', response_model=article_schema.Article)
 async def create_article(
     article_body: article_schema.ArticleCreate, db: AsyncSession = Depends(get_db)
     ):

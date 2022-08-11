@@ -33,7 +33,7 @@ async def create_articles(
     articles = article_animeanime.scraping()
     print("articles = ", articles)
     print("length = ", len(articles))
-    for article in articles:
+    for article in reversed(articles):
         article = article_model.Article(**article)
         db.add(article)
         await db.commit()
