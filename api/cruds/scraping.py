@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.models.article as article_model
 import api.schemas.article as article_schema
 import api.scraping.animeanime as article_animeanime
+import api.twitter.tweet as article_tweet
 import asyncio
 from sqlalchemy.engine import Result
 from sqlalchemy import select
@@ -57,17 +58,19 @@ async def create_articles(
 
     # 新しい記事の選別
     new_article = []
-    print("latest_article = ", latest_article[0][2])
+    print("latest_article = ", latest_article)
     print("article = ", articles)
     for article in articles:
         print("article[articleURL] = ", article["articleURL"])
-        if article["articleURL"] == latest_article[0][2]:
-            print("break")
-            break
+        if latest_article:
+            if article["articleURL"] == latest_article[0][2]:
+                print("break")
+                break
         new_article.append(article)
 
     print("new_article = ", new_article)
     for article in reversed(new_article):
+        article_tweet.tweet(article)
         article = article_model.Article(**article)
         db.add(article)
         await db.commit()
