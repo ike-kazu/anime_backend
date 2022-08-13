@@ -30,7 +30,7 @@ async def create_articles(
     return articles_create.dict()
 
 
-async def get_articles(db: AsyncSession) -> List[Tuple[int, str, bool]]:
+async def get_articles(db: AsyncSession) -> List[Tuple[int, str, str]]:
     result: Result = await (
         db.execute(
             select(

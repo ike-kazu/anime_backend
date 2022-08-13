@@ -35,6 +35,10 @@ async def update_article(article_id: int, article_body: article_schema.ArticleCr
 async def delete_article():
     return
 
+@router.get("/article/latest/", response_model=List[article_schema.ArticleCreateResponse])
+async def get_latestArticle(db: AsyncSession = Depends(get_db)):
+    return await article_scraping.get_article_latest(db)
+
 @router.post("/scraping", response_model=article_schema.Article)
 async def create_scraping_articles(
     articles_body: article_schema.ArticlesCreate, db: AsyncSession = Depends(get_db)):
